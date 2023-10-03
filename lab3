@@ -1,46 +1,93 @@
-# infa_2023_yasya
 import pygame
 from pygame.draw import *
-
+# После импорта библиотеки, необходимо её инициализировать:
 pygame.init()
 
+# И создать окно:
 FPS = 30
-screen = pygame.display.set_mode((600, 600))
+screen = pygame.display.set_mode((600, 400))
 
+# блок функций, рисующий запчасти картинки
 
+def sky(red, green, blue, length, width):
+#'''Рисует полоску неба из левого верхнего угла поля, заданных цветов red = int(0,255),
+#green = int(0,255), blue = int(0,255) и заданной длины length = int и ширины width = int  
+    rect(screen, (red, green, blue), (0, 0, length, width))
+    
+def grass(red, green, blue, xo, yo, length, width):
+#'''Рисует полоску травы из точки поля с координатами xo = int, yo = int , заданных цветов red = int(0,255),
+#green = int(0,255), blue = int(0,255) и заданной длины length = int и ширины width = int 
+    rect(screen, (red, green, blue), (xo, yo, length, width))
+    
+def house(redw, greenw, bluew, xo, yo, length, width, redr, greenr, bluer):
+#рисует стены и крышу домика заданных цветов edw, greenw, bluew для стен и redr, greenr, bluer для крышиб
+#начиная рисовать из точки хо, yo поля заданной длины(ширины домика) length и высоты  width
+    rect(screen, (redw, greenw, bluew), (xo, yo, length, width))
+    rect(screen, (0, 0, 0), (xo, yo, length, width), 2)
+    polygon(screen, (redr, greenr, bluer), [(xo,yo), (xo+(length/2),yo-yo/3),
+                               (xo+length,yo), (xo,yo)])
+    polygon(screen, (0, 0, 0), [(xo,yo), (xo+(length/2),yo-yo/3),
+                               (xo+length,yo), (xo,yo)], 2)
+    
+def window(red, green, blue, xo, yo, length, width, redc, greenc, bluec, widthc):
+#рисует окно залитое цветом, заданный параметром red, green, blue = int(0,255)
+#рисует из координат верхнего левого угла xo, yo = int, длины length = int и ширины  width = int
+#рисует раму цвета, заданного следующими параметрами redc, greenc, bluec = int(0,255), ширины widthc = int
+    rect(screen, (red, green, blue), ( xo, yo, length, width))
+    rect(screen, (redc, greenc, bluec), (xo, yo, length, width), widthc)
+    
+def cloud(red, green, blue, xo, yo, size, redc, greenc, bluec, width):
+#рисует облако из 7 кружочков размером size = int, начиная с координаты центра xo, yo левого нижнего кружочка
+#заливает кружочек цветом, заданнм параметрами red, green, blue = int(0,255)
+#рисует обводку ширины width, цвета, заданного следующими параметрами redc, greenc, bluec = int(0,255)
+    for i in range(4):
+        circle(screen, (red, green, blue), (xo + i*(size+size/6), yo), size)
+        circle(screen, (redc, greenc, bluec), (xo + i*(size+size/6), yo), size, width)
+        
+    for j in range(3):
+        circle(screen, (red, green, blue), ((xo + 2*size/3) + j*(size+size/6), yo-(size + size/6)), size)
+        circle(screen, (redc, greenc, bluec), ((xo + 2*size/3) + j*(size+size/6), yo-(size + size/6)), size, width)
+        
+def tree(red, green, blue, xo, yo, size, width, length, redc, greenc, bluec, redr, greenr, bluer, widthh):
+#рисует дерево из 6 кружочков, начиная с левого верхнего от его координат центра xo, yo
+#цвета заданного следующими параметрами red, green, blue = int(0,255)
+#c обводкой кружочка цвета, заданного следующими параметрами redс, greenс, blueс, ширины widthh
+#со стволом длины width, ширины length, цвета, заданного следующими параметрами redr, greenr, bluer = int(0,255)
+    rect(screen, (redr, greenr, bluer), (xo- size/2, 2*yo + 8, width, length))
+    circle(screen, (red, green, blue), (xo , yo), size)
+    circle(screen, (redc, greenc, bluec), (xo , yo), size, widthh)
+    for i in range(2):
+        circle(screen, (red, green, blue), (xo - (5*size/6) + i*(size + 2*size/3), yo + (5*size/6)), size)
+        circle(screen, (redc, greenc, bluec), (xo - (5*size/6) + i*(size + 2*size/3), yo + (5*size/6)), size, widthh)
+    circle(screen, (red, green, blue), (xo, yo + size + size/2), size)
+    circle(screen, (redc, greenc, bluec), (xo, yo + size + size/2), size, widthh)
+    circle(screen, (red, green, blue), (xo - 2*size/3, yo + size + 5*size/6), size)
+    circle(screen, (redc, greenc, bluec), (xo - 2*size/3, yo + size + 5*size/6), size, widthh)
+    circle(screen, (red, green, blue), (xo + 2*size/3, yo + size + 5*size/6), size)
+    circle(screen, (redc, greenc, bluec), (xo + 2*size/3, yo + size + 5*size/6), size, widthh)
+    
+    
+    
+sky(204, 255, 255, 600, 175)
+grass(102, 204, 0, 0, 175, 600, 225)
+house(153, 76, 0, 100, 150, 120, 90, 255, 255, 0)
+window(0, 153, 153, 140, 175, 40, 30,255, 128, 0, 3)
+cloud(255, 255, 255, 200, 80, 15, 0, 0, 0, 1)
+tree(15, 83, 14, 485, 75, 40, 30, 70, 0, 0, 0, 0 ,0, 0, 1)
+cloud(255, 255, 255, 320, 100, 15, 0, 0, 0, 1)
 
-circle(screen, (255, 190, 10), (300, 300), 260, 0)
-
-circle(screen, (200, 45, 45), (190, 200), 60, 60)
-
-circle(screen, (20, 35, 35), (190, 200), 20, 60)
-
-circle(screen, (200, 45, 45), (410, 200), 60, 60)
-
-circle(screen, (20, 35, 35), (410, 200), 20, 60)
-
-
-
-rect(screen, (0, 0, 0), (190, 370, 240, 50))
-
-polygon(screen, (0, 0, 0), [(280,110), (280,150), (100, 100), (100,60)])
-
-polygon(screen, (0, 0, 0), [(300,110), (300,150), (480, 100), (480,60)])
-
-
-
+# после чего, чтобы они отобразились на экране, экран нужно обновить:
 pygame.display.update()
 clock = pygame.time.Clock()
 finished = False
+# Эту же команду нужно будет повторять, если на экране происходят изменения.
 
+# Наконец, нужно создать основной цикл, в котором будут отслеживаться
+# происходящие события.
+# Пока единственное событие, которое нас интересует - выход из программы.
+#while True:
 while not finished:
     clock.tick(FPS)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             finished = True
-
-pygame.quit()
-
-
-
-
